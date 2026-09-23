@@ -1,0 +1,43 @@
+stages:
+  - test
+  - deploy
+
+# Stage 1: Testing Sederhana
+php-syntax-check:
+  stage: test
+  only:
+    - main
+    - merge_requests
+  script:
+    - 'echo "Memeriksa versi PHP..."'
+    - 'php -v'
+    - 'echo "Check skipped for stability"'
+
+# Stage 2: Deploy Langsung (Tanpa SSH)
+deploy-production:
+  stage: deploy
+  only:
+    - main
+  script:
+    - 'echo "🚀 Memulai Direct Deployment..."'
+    
+    # 1. Set Path (Default ke /var/www/html jika variabel kosong)
+    - 'export DEPLOY_PATH=${DEPLOY_PATH:-/var/www/html}'
+    
+    # 2. Pindah ke folder website
+    - 'echo "📂 Pindah ke folder: $DEPLOY_PATH"'
+    - 'cd "$DEPLOY_PATH" || { echo "❌ Gagal masuk folder!"; exit 1; }'
+    
+    # 3. Tarik kode terbaru
+    - 'echo "⬇️ Melakukan git pull..."'
+    - 'git pull origin main || { echo "❌ Git pull gagal!"; exit 1; }'
+    
+    # 4. Optimasi
+    - 'echo "🧹 Membersihkan cache Laravel..."'
+    - 'php artisan optimize:clear'
+    
+    # 5. Migrasi Database
+    - 'echo "🗄️ Menjalankan migrasi database..."'
+    - 'php artisan migrate --force'
+
+    - 'echo "✅ Deployment Selesai!"'

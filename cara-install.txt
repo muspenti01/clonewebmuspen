@@ -1,0 +1,46 @@
+
+Panduan Menjalankan Muspen di Lokal (Laragon)
+
+Langkah Cepat:
+- Salin .env: copy .env.example .env lalu sesuaikan APP_URL dan kredensial DB
+- Composer & NPM: composer install ; npm install
+- Kunci app: php artisan key:generate
+- Storage link: php artisan storage:link
+- Migrasi + seed: php artisan migrate --seed
+- Jalankan: php artisan serve atau gunakan domain Laragon (misal http://muspen.test)
+
+Kenapa "npm run build" error?
+- Proyek ini menggunakan Laravel Mix, bukan Vite. Di [package.json](file:///c:/laragon/www/muspen/package.json) tidak ada script bernama "build".
+  Script yang tersedia:
+  {
+    "dev": "npm run development",
+    "development": "mix",
+    "prod": "npm run production",
+    "production": "mix --production"
+  }
+- Perintah yang benar:
+  - Development: npm run dev
+  - Production: npm run prod
+- Jika PowerShell menolak "&&": jalankan perintah beruntun dengan titik koma
+  Contoh: npm install ; npm run dev
+- Jika error "mix: not found" atau build gagal:
+  1) Hapus node_modules dan lock
+     rmdir /s /q node_modules ; del package-lock.json
+  2) Instal ulang
+     npm install
+  3) Jalankan kembali
+     npm run dev
+- Jika asset tidak termuat:
+  - Sesuaikan APP_URL di [.env](file:///c:/laragon/www/muspen/.env) dengan domain lokal Anda
+  - Bersihkan cache: php artisan optimize:clear
+
+Catatan Gambar & Storage:
+- Aset statis ada di public/assets dan public/img, dipanggil via helper asset()
+- Unggahan user/admin disimpan di storage/app/public dan diakses via public/storage setelah storage:link
+- Folder storage/app/public memang kosong setelah clone karena file unggahan tidak dilacak Git. Upload ulang melalui admin atau salin dari server production jika ingin tampilan persis sama.
+
+Rujukan:
+- filesystems: [filesystems.php](file:///c:/laragon/www/muspen/config/filesystems.php)
+- env lokal: [.env](file:///c:/laragon/www/muspen/.env)
+- paket: [composer.json](file:///c:/laragon/www/muspen/composer.json)
+- detail blog (captcha/honeypot): [detail.blade.php:L192-L200](file:///c:/laragon/www/muspen/resources/views/landing-page/blog/detail.blade.php#L192-L200)
