@@ -48,9 +48,30 @@ Menu khusus untuk pengaturan konten spesifik:
 ### **Muspen Updates**
 - **Fungsi**: Menampilkan postingan media sosial terbaru (Instagram Reels/Post, TikTok, atau Twitter/X) di halaman beranda website.
 - **Cara Pengisian Embed Code**:
-  - Salin (copy) kode embed dari postingan Instagram, TikTok, atau Twitter.
-  - Tempel (paste) ke kolom **Embed Code**.
-  - *Catatan:* Cukup masukkan kode `<blockquote>...</blockquote>`. Tag `<script>...</script>` tidak diperlukan (sistem sudah otomatis membersihkannya agar aman dari pemblokiran firewall WAF, dan skrip pemutar resmi sudah aktif otomatis di website utama sehingga tampilan tetap rapi dan interaktif).
+  1. Buka postingan/reel di Instagram melalui browser.
+  2. Klik ikon titik tiga (**...**) di kanan atas postingan > pilih **Sematkan (Embed)** > salin kode embed.
+  3. Tempelkan ke kolom **Embed Code**. Tag `<script>` di bagian bawah akan otomatis dibersihkan oleh sistem agar aman dari pemblokiran firewall server.
+- **Template Manual (Tinggal Ganti URL Postingan)**:
+  Jika ingin membuat secara manual tanpa perlu copy dari Instagram:
+
+  **1. Template untuk Instagram Feed / Foto / Video (`/p/`):**
+  ```html
+  <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/KODE_POSTINGAN/" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin:1px; max-width:540px; min-width:326px; padding:0; width:99.375%;">
+    <div style="padding:16px;">
+      <a href="https://www.instagram.com/p/KODE_POSTINGAN/" target="_blank">Lihat postingan ini di Instagram</a>
+    </div>
+  </blockquote>
+  ```
+
+  **2. Template untuk Instagram Reels (`/reel/`):**
+  ```html
+  <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/KODE_REEL/" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin:1px; max-width:540px; min-width:326px; padding:0; width:99.375%;">
+    <div style="padding:16px;">
+      <a href="https://www.instagram.com/reel/KODE_REEL/" target="_blank">Lihat reel ini di Instagram</a>
+    </div>
+  </blockquote>
+  ```
+  *(Cukup ganti bagian link `https://www.instagram.com/...` dengan URL postingan Instagram yang ingin ditampilkan).*
 
 ### **TV Links**
 - **Fungsi**: Mengelola tautan video (misal Youtube) yang ditampilkan di area Muspen TV pada website.
