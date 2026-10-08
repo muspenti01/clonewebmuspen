@@ -46,10 +46,14 @@ Menu khusus untuk pengaturan konten spesifik:
 - **Kegunaan**: Admin dapat membuat event baru dengan detail tanggal, deskripsi, dan kuota peserta. Event ini akan muncul di kalender website agar pengunjung bisa mendaftar.
 
 ### **Muspen Updates**
-- **Fungsi**: Menu untuk memposting berita terbaru, pengumuman, atau artikel berita seputar aktivitas museum.
+- **Fungsi**: Menampilkan postingan media sosial terbaru (Instagram Reels/Post, TikTok, atau Twitter/X) di halaman beranda website.
+- **Cara Pengisian Embed Code**:
+  - Salin (copy) kode embed dari postingan Instagram, TikTok, atau Twitter.
+  - Tempel (paste) ke kolom **Embed Code**.
+  - *Catatan:* Cukup masukkan kode `<blockquote>...</blockquote>`. Tag `<script>...</script>` tidak diperlukan (sistem sudah otomatis membersihkannya agar aman dari pemblokiran firewall WAF, dan skrip pemutar resmi sudah aktif otomatis di website utama sehingga tampilan tetap rapi dan interaktif).
 
 ### **TV Links**
-- **Fungsi**: Mengelola tautan video (misal Youtube) yang mungkin ditampilkan di area tertentu pada website atau layar informasi museum.
+- **Fungsi**: Mengelola tautan video (misal Youtube) yang ditampilkan di area Muspen TV pada website.
 
 ---
 

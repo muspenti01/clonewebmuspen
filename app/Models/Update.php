@@ -88,4 +88,15 @@ class Update extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function setEmbedLinkAttribute($value)
+    {
+        if ($value) {
+            // Strip any <script> tags for security and WAF safety
+            $clean = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $value);
+            $this->attributes['embed_link'] = trim($clean);
+        } else {
+            $this->attributes['embed_link'] = $value;
+        }
+    }
 }

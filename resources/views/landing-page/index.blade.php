@@ -665,8 +665,26 @@
 			}
 		}
 	});
-    setTimeout(() => {
-        $('.owl-muspen-update-custom').trigger('refresh.owl.carousel')
-    }, 3000);
+    function refreshSocialEmbeds() {
+        if (window.instgrm && window.instgrm.Embeds) {
+            window.instgrm.Embeds.process();
+        }
+        if (window.twttr && window.twttr.widgets) {
+            window.twttr.widgets.load();
+        }
+        $('.owl-muspen-update-custom').trigger('refresh.owl.carousel');
+    }
+
+    setTimeout(refreshSocialEmbeds, 1500);
+    setTimeout(refreshSocialEmbeds, 3500);
+
+    window.addEventListener('load', function() {
+        setTimeout(refreshSocialEmbeds, 500);
+    });
 </script>
+
+<!-- Social Media Embed SDKs for Muspen Updates -->
+<script async src="//www.instagram.com/embed.js"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 @endsection

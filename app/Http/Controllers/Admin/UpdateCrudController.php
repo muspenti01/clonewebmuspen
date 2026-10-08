@@ -75,11 +75,40 @@ class UpdateCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'embed_link',
-            'label' => 'Embed Code',
+            'label' => 'Embed Code (Instagram / TikTok / Twitter)',
             'type' => 'textarea',
+            'hint' => '<b>Tips:</b> Tempel kode embed resmi dari Instagram/TikTok/Twitter. Tag <code>&lt;script&gt;</code> akan otomatis dibersihkan oleh sistem agar aman dan tidak diblokir firewall/WAF. Script pemutar embed sudah aktif otomatis di website utama.',
             'attributes' => [
-                'placeholder' => ""
-              ], 
+                'placeholder' => "Contoh:\n<blockquote class=\"instagram-media\" data-instgrm-permalink=\"...\">...</blockquote>",
+                'rows' => 6,
+            ], 
+        ]);
+
+        $this->crud->addField([
+            'name' => 'embed_cleaner_script',
+            'type' => 'custom_html',
+            'value' => '
+                <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var textarea = document.querySelector(\'textarea[name="embed_link"]\');
+                    if (textarea) {
+                        function cleanScriptTags() {
+                            if (textarea.value.includes("<script")) {
+                                textarea.value = textarea.value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "").trim();
+                            }
+                        }
+                        textarea.addEventListener("input", cleanScriptTags);
+                        textarea.addEventListener("paste", function() {
+                            setTimeout(cleanScriptTags, 50);
+                        });
+                        var form = textarea.closest("form");
+                        if (form) {
+                            form.addEventListener("submit", cleanScriptTags);
+                        }
+                    }
+                });
+                </script>
+            '
         ]);
 
         // $this->crud->addField([
