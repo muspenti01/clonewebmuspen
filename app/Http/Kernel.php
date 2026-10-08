@@ -45,7 +45,6 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\SecurityHeaders::class,
     ];
 
     /**
@@ -62,6 +61,7 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\DenyDSStoreAccess::class,
         ],
 

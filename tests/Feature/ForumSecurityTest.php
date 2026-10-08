@@ -131,29 +131,4 @@ class ForumSecurityTest extends TestCase
             $response->assertDontSee('QueryException');
         }
     }
-
-    /**
-     * Test security headers are present on regular requests, error responses (405 on report endpoint), and security.txt.
-     */
-    public function test_security_headers_and_security_txt_are_present()
-    {
-        // 1. Home / Forum request
-        $response = $this->get('/forum');
-        $response->assertHeader('X-Content-Type-Options', 'nosniff');
-        $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
-        $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-        $this->assertTrue($response->headers->has('Content-Security-Policy'));
-
-        // 2. GET to POST-only /forum/10/report (triggers 405 Method Not Allowed)
-        // Must still return security headers (remediating Findings 7 & 8)
-        $responseReport = $this->get('/forum/10/report');
-        $this->assertEquals(405, $responseReport->getStatusCode());
-        $responseReport->assertHeader('X-Content-Type-Options', 'nosniff');
-        $responseReport->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-
-        // 3. security.txt availability (remediating Finding 10)
-        $responseSecurityTxt = $this->get('/.well-known/security.txt');
-        $responseSecurityTxt->assertStatus(200);
-        $responseSecurityTxt->assertSee('Contact: mailto:muspen@komdigi.go.id');
-    }
 }

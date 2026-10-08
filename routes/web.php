@@ -98,14 +98,5 @@ Route::post('/guest-book/attend', [\App\Http\Controllers\GuestBookController::cl
 
 Route::get('/visitor', [\App\Http\Controllers\VisitorController::class, 'index'])->name('visitor');
 
-Route::get('/.well-known/security.txt', function () {
-    $path = public_path('.well-known/security.txt');
-    if (file_exists($path)) {
-        return response()->file($path, ['Content-Type' => 'text/plain; charset=utf-8']);
-    }
-    return response("Contact: mailto:muspen@komdigi.go.id\nExpires: 2027-12-31T23:59:59.000Z\nPreferred-Languages: id, en\nCanonical: https://muspen.komdigi.go.id/.well-known/security.txt\n", 200, ['Content-Type' => 'text/plain; charset=utf-8']);
-});
-
 // Route::get('auth/google', [\App\Http\Controllers\GoogleController::class, 'redirect'])->name('login.google');
 // Route::get('auth/google/callback', [\App\Http\Controllers\GoogleController::class, 'callback']);
-
