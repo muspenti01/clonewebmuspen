@@ -44,11 +44,11 @@
                         <span class="sub-title">Visi dan Misi</span>
                         <h2>Visi</h2>
                         <p>
-                            {{ Setting::get('visi') }}
+                            {!! nl2br(e(Setting::get('visi') ?: '“Menjadi SMART Museum yang edukatif, inklusif, dan inovatif.”')) !!}
                         </p>
                         <h2 class="mt-5">Misi</h2>
                         <p>
-                            {{ Setting::get('misi') }}
+                            {!! nl2br(e(Setting::get('misi') ?: "1. Mewujudkan tata kelola kelembagaan museum yang berintegritas, akuntabel, dan berkelanjutan.\n2. Mengelola dan melestarikan koleksi sejarah komunikasi bangsa secara profesional dan berstandar internasional.\n3. Meningkatkan mutu pelayanan publik prima yang berorientasi pada kepuasan pengunjung.\n4. Memperkuat partisipasi, kolaborasi dan kemitraan strategis untuk pengembangan pengetahuan dan inovasi komunikasi publik.")) !!}
                         </p>
                     </div>
                 </div>
