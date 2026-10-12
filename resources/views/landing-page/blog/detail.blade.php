@@ -75,28 +75,26 @@
                                 opacity: 1;
                             }
                         </style>
-                        <div class="d-flex w-100 gap-2 article-image-preview" style="max-height:12em; overflow:hidden;">
-                        @for ($i = 1; $i <= 5; $i++)
-                        {{-- limit only 5 image --}}
-                        @php $methodAsString = 'ImageUrl'.$i @endphp
-                        @if ($i == 1)
-                            {{-- first iteration --}}
-                            @if ($article->imageUrl != 'assets/img/blog/blog1.jpg')
-                            {{-- skip default image --}}
-                            <a href="{{ url($article->imageUrl) }}" target="_blank">
-                                <img src="{{ url($article->imageUrl) }}" alt="blog-details" style="max-height:12em">
+                        @php
+                            $galleryImages = array_filter([
+                                !empty($article->image) ? $article->imageUrl : null,
+                                !empty($article->image2) ? $article->imageUrl2 : null,
+                                !empty($article->image3) ? $article->imageUrl3 : null,
+                                !empty($article->image4) ? $article->imageUrl4 : null,
+                                !empty($article->image5) ? $article->imageUrl5 : null,
+                            ], function($img) {
+                                return !empty($img) && !str_contains($img, 'assets/img/blog/blog1.jpg');
+                            });
+                        @endphp
+                        @if(count($galleryImages) > 0)
+                        <div class="d-flex w-100 gap-2 article-image-preview mb-3" style="max-height:12em; overflow:hidden;">
+                            @foreach($galleryImages as $imgUrl)
+                            <a href="{{ $imgUrl }}" target="_blank">
+                                <img src="{{ $imgUrl }}" alt="blog-details" style="max-height:12em">
                             </a>
-                            @endif
-                        @else
-                            @if ($article->$methodAsString != 'assets/img/blog/blog1.jpg')
-                            {{-- skip default image --}}
-                            <a href="{{ url($article->$methodAsString) }}" target="_blank">
-                                <img src="{{ url($article->$methodAsString) }}" alt="blog-details" style="max-height:12em">
-                            </a>
-                            @endif
-                        @endif
-                        @endfor
+                            @endforeach
                         </div>
+                        @endif
                         <div class="article-content">
                             <div class="entry-meta">
                                 <ul>

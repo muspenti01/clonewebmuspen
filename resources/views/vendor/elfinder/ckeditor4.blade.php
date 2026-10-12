@@ -29,7 +29,25 @@
                     url: '{{ route("elfinder.connector") }}',  // connector URL
                     soundPath: '{{ asset($dir.'/sounds') }}',
                     getFileCallback : function(file) {
-                        window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                        if (Array.isArray(file)) {
+                            var editorName = getUrlParam('CKEditor');
+                            if (editorName && window.opener.CKEDITOR && window.opener.CKEDITOR.instances[editorName]) {
+                                var html = '';
+                                file.forEach(function(f) {
+                                    var fUrl = f.url || (typeof f === 'string' ? f : '');
+                                    if (fUrl) {
+                                        html += '<p><img src="' + fUrl + '" alt="" /></p>';
+                                    }
+                                });
+                                window.opener.CKEDITOR.instances[editorName].insertHtml(html);
+                            } else if (file.length > 0) {
+                                var firstUrl = file[0].url || (typeof file[0] === 'string' ? file[0] : '');
+                                window.opener.CKEDITOR.tools.callFunction(funcNum, firstUrl);
+                            }
+                        } else {
+                            var fileUrl = file.url || (typeof file === 'string' ? file : '');
+                            window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+                        }
                         window.close();
                     }
                 }).elfinder('instance');

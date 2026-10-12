@@ -30,7 +30,7 @@ class LandingPageController extends Controller
 
         $galleries = Gallery::limit(4)->get();
 
-        $tvlinks = TvLink::limit(4)->get();
+        $tvlinks = TvLink::orderBy('created_at', 'desc')->take(6)->get();
 
         $updates = Update::orderBy('created_at','desc')->get();
 

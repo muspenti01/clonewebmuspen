@@ -77,19 +77,20 @@ class TvLinkCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'embed_link',
-            'label' => 'Link Embed',
+            'label' => 'Link Video YouTube',
             'type' => 'text',
+            'hint' => '<b>Tips:</b> Bisa masukkan link YouTube biasa (<code>https://www.youtube.com/watch?v=...</code>), link share (<code>https://youtu.be/...</code>), Shorts, maupun link embed resmi. Sistem akan otomatis mengubahnya menjadi link embed yang valid.',
             'attributes' => [
-                'placeholder' => "Contoh: https://www.youtube.com/embed/sdjaoJOASD"
-              ], 
+                'placeholder' => "Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/..."
+            ], 
         ]);
 
         $this->crud->addField(
             [
                 'name' => 'is_featured',
-                'label' => 'Utama',
+                'label' => 'Utama (Featured)',
                 'type' => 'boolean',
-                // 'options' => [0 => 'Active', 1 => 'Inactive']
+                'hint' => 'Aktifkan jika ingin video ini menjadi video utama (layar besar) di halaman depan.'
             ]
         );
         

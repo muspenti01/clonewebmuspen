@@ -357,32 +357,36 @@
                 </div>
             </div>
         </div>
+        @php
+            $featuredTv = $tvlinks->where('is_featured', 1)->first() ?? $tvlinks->first();
+            $otherTv = $featuredTv ? $tvlinks->where('id', '!=', $featuredTv->id)->take(3) : collect();
+        @endphp
+        @if($featuredTv && $featuredTv->embed_link)
         <div class="row on-desktop">
             <div class="col-md-12 text-center">
-                <iframe width="560" height="315" src="{{ $tvlinks->where('is_featured', 1)->first()?->embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="{{ $featuredTv->embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
+        @if($otherTv->isNotEmpty())
         <div class="row on-desktop" style="max-width: 700px; margin: 0 auto">
-            @foreach($tvlinks->where('is_featured', 0) as $tvlink)
+            @foreach($otherTv as $tvlink)
                 <div class="col-md-4">
                     <iframe width="100%" src="{{ $tvlink->embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             @endforeach
         </div>
+        @endif
         <div class="row on-mobile">
             <div class="col-md-12">
                 <div class="owl-carousel mobile-tv owl-theme">
-                    @if($tvlinks->where('is_featured', 1)->first()?->embed_link)
-                        <div class="item"><iframe style="width: 100%" src="{{ $tvlinks->where('is_featured', 1)->first()?->embed_link }}?autoplay=0" title="YouTube Muspen" autoplay=0 frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-                    @endif
-                    @if($tvlinks->where('is_featured', 0)->first()?->embed_link)
-                        @foreach($tvlinks->where('is_featured', 0) as $tvlink)
+                    <div class="item"><iframe style="width: 100%" src="{{ $featuredTv->embed_link }}?autoplay=0" title="YouTube Muspen" autoplay=0 frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+                    @foreach($otherTv as $tvlink)
                         <div class="item"><iframe style="width: 100%" src="{{ $tvlink->embed_link }}?autoplay=0" title="YouTube Muspen" frameborder="0" autoplay=0 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-                        @endforeach
-                    @endif
+                    @endforeach
                 </div>
             </div>
         </div>
+        @endif
         <div class="row mt-3">
             <div class="col-md-12 text-center">
                 <a class="default-btn blue-btn" href="{{ Setting::get('youtube')}}">Lihat Lainnya...</a>
@@ -684,7 +688,7 @@
 </script>
 
 <!-- Social Media Embed SDKs for Muspen Updates -->
-<script async src="//www.instagram.com/embed.js"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
 <script async src="https://www.tiktok.com/embed.js"></script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 @endsection

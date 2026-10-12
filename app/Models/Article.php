@@ -43,7 +43,11 @@ class Article extends \Backpack\NewsCRUD\app\Models\Article
     {
         parent::boot();
         static::deleted(function($obj) {
-            Storage::disk('public')->delete($obj->image);
+            foreach (['image', 'image2', 'image3', 'image4', 'image5'] as $attr) {
+                if (!empty($obj->{$attr})) {
+                    Storage::disk('public')->delete($obj->{$attr});
+                }
+            }
         });
     }
 
@@ -95,47 +99,80 @@ class Article extends \Backpack\NewsCRUD\app\Models\Article
 
     public function ImageLogic($value, $attribute_name)
     {
-        // or use your own disk, defined in config/filesystems.php
         $disk = "public";
-        // destination path relative to the disk above
         $destination_path = "article";
         
-        // if the image was erased
-        if ($value==null) {
-            // delete the image from disk
-            Storage::disk($disk)->delete($this->{$attribute_name});
-            
-            // set null in the database column
+        // If image was cleared
+        if ($value === null || $value === '') {
+            if (!empty($this->{$attribute_name})) {
+                Storage::disk($disk)->delete($this->{$attribute_name});
+            }
             $this->attributes[$attribute_name] = null;
+            return;
+        }
+
+        // If an UploadedFile instance was sent (direct file upload)
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            try {
+                $image = Image::make($value);
+                if ($image->width() > 1600 || $image->height() > 1600) {
+                    $image->resize(1600, 1600, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                }
+                $encoded = $image->encode('jpg', 85);
+
+                $filename = md5(uniqid((string) microtime(true), true) . mt_rand()) . '.jpg';
+                Storage::disk($disk)->put($destination_path . '/' . $filename, (string) $encoded);
+
+                if (!empty($this->{$attribute_name}) && $this->{$attribute_name} !== $destination_path . '/' . $filename) {
+                    Storage::disk($disk)->delete($this->{$attribute_name});
+                }
+
+                $this->attributes[$attribute_name] = $destination_path . '/' . $filename;
+                $image->destroy();
+            } catch (\Exception $e) {
+                \Log::error("Failed to process uploaded file for {$attribute_name}: " . $e->getMessage());
+            }
+            return;
         }
         
-        // if a base64 was sent, store it in the db
-        if (Str::startsWith($value, 'data:image'))
-        {
-            
-            // 0. Make the image
-            $image = Image::make($value)->encode('jpg', 90);
+        // If a base64 string was sent (from cropper or data URL)
+        if (is_string($value) && Str::startsWith($value, 'data:image')) {
+            try {
+                $image = Image::make($value);
+                if ($image->width() > 1600 || $image->height() > 1600) {
+                    $image->resize(1600, 1600, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                }
+                $encoded = $image->encode('jpg', 85);
 
-            // 1. Generate a filename.
-            $filename = md5($value.time()).'.jpg';
+                $filename = md5(uniqid((string) microtime(true), true) . mt_rand()) . '.jpg';
+                Storage::disk($disk)->put($destination_path . '/' . $filename, (string) $encoded);
 
-            // 2. Store the image on disk.
-            Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
+                if (!empty($this->{$attribute_name}) && $this->{$attribute_name} !== $destination_path . '/' . $filename) {
+                    Storage::disk($disk)->delete($this->{$attribute_name});
+                }
 
-            // 3. Delete the previous image, if there was one.
-            Storage::disk($disk)->delete($this->{$attribute_name});
+                $this->attributes[$attribute_name] = $destination_path . '/' . $filename;
+                $image->destroy();
+            } catch (\Exception $e) {
+                \Log::error("Failed to process base64 image for {$attribute_name}: " . $e->getMessage());
+            }
+            return;
+        }
 
-            // 4. Save the public path to the database
-            // but first, remove "public/" from the path, since we're pointing to it
-            // from the root folder; that way, what gets saved in the db
-            // is the public URL (everything that comes after the domain name)
-            $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
+        // If it's already a saved string path or URL, keep it
+        if (is_string($value)) {
+            $this->attributes[$attribute_name] = $value;
         }
     }
 
     public function ImageLogicUrl($attribute_name = 'image')
     {
-        return empty($this->$attribute_name) ? 'assets/img/blog/blog1.jpg' : asset('storage/'.$this->$attribute_name);
+        return empty($this->$attribute_name) ? asset('assets/img/blog/blog1.jpg') : asset('storage/' . ltrim($this->$attribute_name, '/'));
     }
 }

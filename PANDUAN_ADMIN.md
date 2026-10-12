@@ -73,8 +73,19 @@ Menu khusus untuk pengaturan konten spesifik:
   ```
   *(Cukup ganti bagian link `https://www.instagram.com/...` dengan URL postingan Instagram yang ingin ditampilkan).*
 
-### **TV Links**
-- **Fungsi**: Mengelola tautan video (misal Youtube) yang ditampilkan di area Muspen TV pada website.
+### **TV Links (Muspen TV)**
+- **Fungsi**: Mengelola tautan video YouTube yang ditampilkan di area Muspen TV pada halaman beranda website.
+- **Cara Pengisian**:
+  - Kolom **Link Video YouTube**: Anda dapat memasukkan link YouTube biasa (misal: `https://www.youtube.com/watch?v=...`), link share pendek (`https://youtu.be/...`), link YouTube Shorts, maupun kode embed resmi. Sistem secara otomatis akan mengubahnya menjadi tautan embed yang aman dan valid untuk diputar.
+  - Opsi **Utama (Featured)**: Aktifkan centang ini jika video tersebut ingin dijadikan video utama berlayar besar di beranda. Jika tidak ada video yang dicentang sebagai utama, sistem akan otomatis memilih video terbaru. Video lainnya akan ditampilkan di bagian bawah (tampilan desktop) atau carousel geser (tampilan mobile).
+
+### **Forum (Articles / Artikel Forum)**
+- **Fungsi**: Mengelola artikel atau publikasi forum komunikasi dan informasi museum.
+- **Pengunggahan Gambar (Multi-Image)**:
+  - **Image**: Gambar sampul utama artikel.
+  - **Image 2 s/d Image 5**: Gambar dokumentasi/pendukung tambahan (opsional). Anda dapat mengunggah hingga 5 gambar sekaligus.
+  - Seluruh gambar yang diunggah akan otomatis ditampilkan dalam galeri pratinjau foto di halaman detail artikel forum.
+  - Sistem telah dilengkapi fitur kompresi otomatis beresolusi tinggi sehingga proses pengunggahan banyak gambar berjalan cepat, ringan, dan tidak menimbulkan error pada server.
 
 ---
 
