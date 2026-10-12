@@ -69,8 +69,6 @@
                             <div class="content">
                                 <ul class="meta">
                                     <li><i class="ri-time-line"></i> {{$article->created_at->format('d M Y')}}</li>
-                                    <li><i class="ri-message-2-line"></i> <a
-                                            href="{{route('detail.forum',['slug' =>$article->slug])}}">{{$article->comments->count()}}</a></li>
                                 </ul>
                                 <h3>
                                     <a href="{{route('detail.forum',['slug' =>$article->slug])}}">{{$article->title}}</a>

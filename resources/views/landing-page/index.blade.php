@@ -261,9 +261,6 @@
                     <div class="content">
                         <ul class="meta">
                             <li><i class="ri-time-line"></i> {{$article->created_at->format('M D, Y')}}</li>
-                            <li><i class="ri-message-2-line"></i>
-                                <a href="{{route('detail.forum',['slug' => $article->slug])}}">
-                                    {{$article->comments->count()}} Comment</a></li>
                         </ul>
                         <h3><a href="{{route('detail.forum',['slug' => $article->slug])}}">
                                 {{Str::limit($article->title,'50','...')}}

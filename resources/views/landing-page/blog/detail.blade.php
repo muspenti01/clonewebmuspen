@@ -99,8 +99,6 @@
                             <div class="entry-meta">
                                 <ul>
                                     <li><i class="ri-calendar-2-line"></i>{{$article->created_at->format('D-m-y')}}</li>
-                                    <li><i class="ri-message-2-line"></i><a
-                                            href="#comments">({{$article->comments->count()}}) Comments</a></li>
                                     <li><i class="ri-admin-fill"></i> <a href="#" onclick="reportArticle()" data-id="{{$article->id}}">Report article</a></li>
                                 </ul>
                             </div>
@@ -130,69 +128,6 @@
                                                 class="ri-twitter-fill"></i></a></li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="comments-area" id="comments">
-                            <h3 class="comments-title">{{$article->comments->count()}} Comments:</h3>
-                            <ol class="comment-list">
-                                <li class="comment">
-                                    @foreach($article->comments as $comment)
-                                        <div class="comment-body">
-                                            <footer class="comment-meta">
-                                                <div class="comment-author vcard">
-                                                    <img
-                                                        src="{{\App\Helpers\AppHelper::getProfileImage($comment->name)}}"
-                                                        class="avatar" alt="user">
-                                                    <b class="fn">{{$comment->name}}</b>
-                                                </div>
-                                                <div class="comment-metadata">
-                                                    <span>{{$comment->created_at->diffForHumans()}}</span>
-                                                </div>
-                                            </footer>
-                                            <div class="comment-content">
-                                                <p>
-                                                    {!! strip_tags($comment->body) !!}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </li>
-                            </ol>
-                            <div class="comment-respond">
-                            <h3 class="comment-reply-title">Tinggalkan Komentar</h3>
-                            <div id="comment-message" class="alert d-none"></div>
-                            <form id="commentForm" class="comment-form">
-                                @csrf
-                                <input type="hidden" name="article_id" value="{{$article->id}}">
-                                <p class="comment-form-author">
-                                    <label>Nama <span class="required">*</span></label>
-                                    <input type="text" id="author" placeholder="Nama Anda*" name="name"
-                                           required="required">
-                                </p>
-                                <p class="comment-form-email">
-                                    <label>Email <span class="required">*</span></label>
-                                    <input type="email" id="email" placeholder="Email Anda*" name="email"
-                                           required="required">
-                                </p>
-                                <p class="comment-form-comment">
-                                    <label>Komentar</label>
-                                    <textarea name="body" id="comment" cols="45" placeholder="Tulis komentar Anda..."
-                                              rows="5" maxlength="65525" required="required"></textarea>
-                                </p>
-                                <div class="comment-form-comment d-flex align-items-center gap-3 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <img src="{{ captcha_src('flat') }}" alt="captcha" id="captcha-image" style="cursor:pointer;" title="Klik gambar untuk refresh">
-                                    </div>
-                                    <div class="">
-                                        <input type="text" name="captcha" id="captcha" placeholder="Masukkan kode captcha" class="form-control" required>
-                                        <div id="captcha-error" class="invalid-feedback text-danger small mt-1 d-none"></div>
-                                    </div>
-                                </div>
-                                <input type="text" name="hp" style="position:absolute;left:-9999px;opacity:0" tabindex="-1" autocomplete="off">
-                                <p class="form-submit">
-                                    <button type="submit" id="submitBtn" class="submit">Kirim Komentar</button>
-                                </p>
-                            </form>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -292,62 +227,8 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Refresh Captcha
-            $('#captcha-image').on('click', function () {
-                $(this).attr('src', '{{ captcha_src("flat") }}' + Math.random());
-            });
-
             $('#reload-captcha-report').click(function () {
                 $('#captcha-img-report img').attr('src', '{{ captcha_src("flat") }}' + Math.random());
-            });
-
-            // Handle Submit AJAX Comment
-            $('#commentForm').on('submit', function(e) {
-                e.preventDefault();
-                
-                let form = $(this);
-                let btn = $('#submitBtn');
-                let msgBox = $('#comment-message');
-                let captchaErr = $('#captcha-error');
-                
-                // Reset State
-                btn.prop('disabled', true).text('Sedang mengirim...');
-                msgBox.addClass('d-none').removeClass('alert-success alert-danger');
-                captchaErr.addClass('d-none').text('');
-                $('#captcha').removeClass('is-invalid');
-
-                $.ajax({
-                    url: "{{ route('store.comment', ['slug' => $article->slug]) }}",
-                    method: "POST",
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-                        msgBox.removeClass('d-none').addClass('alert-success').text(response.message || 'Komentar berhasil dikirim! Menunggu moderasi.');
-                        form[0].reset();
-                        $('#captcha-image').trigger('click');
-                    },
-                    error: function(xhr) {
-                        let response = xhr.responseJSON;
-                        let errorMessage = 'Terjadi kesalahan saat mengirim komentar.';
-                        
-                        if (response && response.message) {
-                            errorMessage = response.message;
-                        }
-
-                        let errors = response ? response.errors : null;
-
-                        if (errors && errors.captcha) {
-                            $('#captcha').addClass('is-invalid');
-                            captchaErr.removeClass('d-none').text(errors.captcha[0]);
-                        } else {
-                            msgBox.removeClass('d-none').addClass('alert-danger').text(errorMessage);
-                        }
-                        $('#captcha-image').trigger('click');
-                    },
-                    complete: function() {
-                        btn.prop('disabled', false).text('Kirim Komentar');
-                    }
-                });
             });
         });
 
