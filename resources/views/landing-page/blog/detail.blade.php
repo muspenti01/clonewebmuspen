@@ -32,7 +32,7 @@
                 <div class="col-lg-8 col-md-12">
                     <div class="blog-details-desc">
                         <div class='article-image mb-2'>
-                            @if($article->imageUrl != 'assets/img/blog/blog1.jpg')
+                            @if(!empty($article->image) && !str_contains($article->imageUrl, 'assets/img/blog/blog1.jpg'))
                             <div>
                                 <img src="{{ $article->imageUrl }}" alt="blog-details">
                             </div>

@@ -6,9 +6,14 @@
     if (! function_exists('getDiskUrl')) {
         function getDiskUrl($disk, $path) {
             try {
+                if (\Illuminate\Support\Str::contains($path, 'article/')) {
+                    $path = 'article/' . \Illuminate\Support\Str::afterLast($path, 'article/');
+                    $path = explode('?', $path)[0];
+                    $path = explode('#', $path)[0];
+                }
                 $origin = substr(Storage::disk($disk)->url('/'), 0, -1);
                 $path = str_replace($origin, '', $path);
-                return Storage::disk($disk)->url($path);
+                return Storage::disk($disk)->url(ltrim($path, '/'));
             }
             catch (Exception $e) {
                 return url($path);
@@ -172,7 +177,19 @@
                         autoCropArea: 1,
                         responsive: true,
                         preview : element.find('.img-preview'),
-                        aspectRatio : element.attr('data-aspectRatio')
+                        aspectRatio : element.attr('data-aspectRatio'),
+                        ready: function() {
+                            var data = getOptimizedCroppedData();
+                            if (data) {
+                                $hiddenImage.val(data);
+                            }
+                        },
+                        cropend: function() {
+                            var data = getOptimizedCroppedData();
+                            if (data) {
+                                $hiddenImage.val(data);
+                            }
+                        }
                     };
                     var crop = element.attr('data-crop');
 
@@ -202,7 +219,9 @@
 
                     if(crop){
                         $remove.click(function() {
-                            $mainImage.cropper("destroy");
+                            if ($mainImage.data('cropper')) {
+                                $mainImage.cropper("destroy");
+                            }
                             $mainImage.attr('src','');
                             $hiddenImage.val('');
                             $rotateLeft.hide();
@@ -241,15 +260,11 @@
                                 $uploadImage.val("");
                                 $previews.show();
                                 if(crop){
-                                    $mainImage.cropper(options).cropper("reset", true).cropper("replace", this.result);
-                                    
-                                    $mainImage.off('ready.cropper_sync cropend.cropper_sync').on('ready.cropper_sync cropend.cropper_sync', function() {
-                                        var data = getOptimizedCroppedData();
-                                        if (data) {
-                                            $hiddenImage.val(data);
-                                        }
-                                        return true;
-                                    });
+                                    if ($mainImage.data('cropper')) {
+                                        $mainImage.cropper("destroy");
+                                    }
+                                    $mainImage.attr('src', this.result);
+                                    $mainImage.cropper(options);
 
                                     $rotateLeft.show();
                                     $rotateRight.show();
