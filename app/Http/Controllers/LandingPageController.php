@@ -23,9 +23,9 @@ class LandingPageController extends Controller
         $events = Event::where('status','=',Event::STATUS_PUBLISH)
             ->orderBy('created_at','desc')->get();
 
-        $articles = Article::where('status','=',Article::ARTICLE_PUBLISHED)
-        ->where('approval_status', Article::APPROVAL_APPROVE)
-
+        $articles = Article::where('status', '=', Article::ARTICLE_PUBLISHED)
+            ->where('approval_status', Article::APPROVAL_APPROVE)
+            ->orderBy('created_at', 'desc')
             ->limit(3)->get();
 
         $galleries = Gallery::limit(4)->get();
