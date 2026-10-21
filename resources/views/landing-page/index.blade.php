@@ -405,6 +405,30 @@
                 <div class="swiper-slide">
                     <div class="single-feedback-item">
                         <div class="client-info">
+                            <img src="{{ asset('assets/img/testimoni-meutya-hafid.png') }}" alt="Meutya Hafid">
+                            <div class="title">
+                                <h3>Meutya Hafid</h3>
+                                <span>Menteri Komunikasi dan Digital Republik Indonesia</span>
+                            </div>
+                        </div>
+                        <p>Museum Penerangan telah menjadi ruang edukasi yang penting dalam menjaga jejak sejarah komunikasi bangsa sekaligus menyemai semangat literasi media dan informasi kepada masyarakat, khususnya generasi muda. Teruslah menjadi jembatan lintas generasi yang memperkuat pemahaman tentang peran komunikasi dalam pembangunan nasional serta mendorong kesadaran bersama akan pentingnya keamanan digital, khususnya bagi anak-anak di era transformasi digital saat ini.<br><br>Mari, teman-teman, kunjungi Museum Penerangan dan temukan inspirasi dari perjalanan komunikasi di Indonesia. Museum Penerangan, museum di hatiku.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="single-feedback-item">
+                        <div class="client-info">
+                            <img src="{{ asset('assets/img/testimoni-fifi-aleyda.png') }}" alt="Fifi Aleyda Yahya">
+                            <div class="title">
+                                <h3>Fifi Aleyda Yahya</h3>
+                                <span>Direktur Jenderal Komunikasi Publik dan Media</span>
+                            </div>
+                        </div>
+                        <p>Museum Penerangan, teruslah menjadi ruang belajar lintas generasi dan mendorong kesadaran akan pentingnya keamanan digital bagi anak-anak. Mari kunjungi Museum Penerangan dan temukan inspirasi dari perjalanan komunikasi bangsa.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="single-feedback-item">
+                        <div class="client-info">
                             <img src="{{ asset('assets/img/testimoni-1.jpeg') }}" alt="user">
                             <div class="title">
                                 <h3>Ade Garnandi</h3>
@@ -441,7 +465,7 @@
                 <div class="swiper-slide">
                     <div class="single-feedback-item">
                         <div class="client-info">
-                            <img src="{{ asset('assets/img/testimoni-3.jpeg') }}" alt="user">
+                            <img src="{{ asset('assets/img/testimoni-4.jpeg') }}" alt="user">
                             <div class="title">
                                 <h3>Yosi Mokalu</h3>
                                 <span>Ketua Siberkreasi</span>
